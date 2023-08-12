@@ -8,8 +8,11 @@ const Footer = () => {
   return (
     <View style={styles.container}>
       <View style={styles.chatFooter}>
-        <TextInput placeholder="Type a message" />
-        <View style={{ flex: 0.1, alignItems: 'center' }}>
+        <TextInput placeholder="Type a message" multiline style={{
+          marginRight:10,
+          flex:0.9,
+        }} />
+        <View style={{ flex: 0.1, justifyContent:'center',alignSelf:'center' }}>
           <Feather name="send" size={24} color="black" />
         </View>
       </View>
@@ -18,12 +21,14 @@ const Footer = () => {
 };
 const styles = StyleSheet.create({
   container: {
-    flex: 0.1,
+    position: "absolute",
+    bottom: 20,
+    width: "100%",
     backgroundColor: Colors.greyBackground,
   },
   chatFooter: {
     flexDirection: "row",
-    flex:0.9,
+    flex:1,
     justifyContent: "space-between",
     padding: 10,
     marginHorizontal: 20,
