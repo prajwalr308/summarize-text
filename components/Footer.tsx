@@ -1,17 +1,20 @@
-import { View, Text, StyleSheet } from "react-native";
-import React from "react";
+import { View, StyleSheet, TextInput } from "react-native";
+import React, { useState } from "react";
 import Colors from "../constants/Colors";
 import { Feather } from "@expo/vector-icons";
-import { TextInput } from "react-native-gesture-handler";
 
 const Footer = () => {
+  const [inputHeight, setInputHeight] = useState(40);
+
   return (
     <View style={styles.container}>
       <View style={styles.chatFooter}>
-        <TextInput placeholder="Type a message" multiline style={{
-          marginRight:10,
-          flex:0.9,
-        }} />
+        <TextInput 
+            placeholder="Type a message" 
+            multiline 
+            style={[styles.input, { height: Math.max(40, inputHeight) }]} 
+            onContentSizeChange ={(e:any) => setInputHeight(e.nativeEvent.contentSize.height)}
+        />
         <View style={{ flex: 0.1, justifyContent:'center',alignSelf:'center' }}>
           <Feather name="send" size={24} color="black" />
         </View>
@@ -19,6 +22,7 @@ const Footer = () => {
     </View>
   );
 };
+
 const styles = StyleSheet.create({
   container: {
     position: "absolute",
@@ -28,13 +32,13 @@ const styles = StyleSheet.create({
   },
   chatFooter: {
     flexDirection: "row",
-    flex:1,
+    flex: 1,
     justifyContent: "space-between",
     padding: 10,
     marginHorizontal: 20,
     marginVertical: 10,
     borderRadius: 20,
-    height: 60,
+    minHeight: 60,
     backgroundColor: "#FFF",
     shadowColor: "#000",
     shadowOffset: {
@@ -43,8 +47,14 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
-
     elevation: 5,
   },
+  input: {
+    marginRight: 10,
+    flex: 0.9,
+    minHeight: 40, // Minimum height
+    maxHeight: 100, // Maximum height (you can adjust this value as per your requirement)
+  },
 });
+
 export default Footer;
