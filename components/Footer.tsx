@@ -2,21 +2,52 @@ import { View, StyleSheet, TextInput } from "react-native";
 import React, { useState } from "react";
 import Colors from "../constants/Colors";
 import { Feather } from "@expo/vector-icons";
+import { useInputStore, useSummaryStore } from "../utils/store";
 
 const Footer = () => {
+  const apiUrl = process.env.EXPO_PUBLIC_API_URL as string;
   const [inputHeight, setInputHeight] = useState(40);
 
+  const { inputText, setInputText } = useInputStore();
+  const { summary, setSummary } = useSummaryStore();
+
+  const onSumbit = () => {
+    console.log("api url", apiUrl);
+    fetch(apiUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        text: inputText,
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Success:", data);
+        setSummary(data.summary);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  };
   return (
     <View style={styles.container}>
       <View style={styles.chatFooter}>
-        <TextInput 
-            placeholder="Type a message" 
-            multiline 
-            style={[styles.input, { height: Math.max(40, inputHeight) }]} 
-            onContentSizeChange ={(e:any) => setInputHeight(e.nativeEvent.contentSize.height)}
+        <TextInput
+          placeholder="Type a message"
+          multiline
+          value={inputText}
+          onChangeText={setInputText}
+          style={[styles.input, { height: Math.max(40, inputHeight) }]}
+          onContentSizeChange={(e: any) =>
+            setInputHeight(e.nativeEvent.contentSize.height)
+          }
         />
-        <View style={{ flex: 0.1, justifyContent:'center',alignSelf:'center' }}>
-          <Feather name="send" size={24} color="black" />
+        <View
+          style={{ flex: 0.1, justifyContent: "center", alignSelf: "center" }}
+        >
+          <Feather onPress={onSumbit} name="send" size={24} color="black" />
         </View>
       </View>
     </View>

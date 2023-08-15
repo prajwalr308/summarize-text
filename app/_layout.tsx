@@ -56,7 +56,7 @@ function RootLayoutNav() {
 
   return (
     <SafeAreaProvider>
-      <StatusBar backgroundColor={Colors.greyBackground} />
+      <StatusBar backgroundColor={Colors.greyBackground}  />
       <SafeAreaView style={{ flex: 1 }}>
         <Slot />
         <Footer />
