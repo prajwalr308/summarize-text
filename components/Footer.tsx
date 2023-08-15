@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import Colors from "../constants/Colors";
 import { Feather } from "@expo/vector-icons";
 import { useInputStore, useSummaryStore } from "../utils/store";
+import { MaterialIcons } from "@expo/vector-icons";
 
 const Footer = () => {
   const apiUrl = process.env.EXPO_PUBLIC_API_URL as string;
@@ -10,6 +11,7 @@ const Footer = () => {
 
   const { inputText, setInputText } = useInputStore();
   const { summary, setSummary } = useSummaryStore();
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   const onSumbit = () => {
     console.log("api url", apiUrl);
@@ -26,11 +28,19 @@ const Footer = () => {
       .then((data) => {
         console.log("Success:", data);
         setSummary(data.summary);
+        setIsSubmitted(true);
       })
       .catch((error) => {
         console.error("Error:", error);
+        setIsSubmitted(false);
       });
   };
+  const onReset = () => {
+    setInputText("");
+    setSummary("");
+    setIsSubmitted(false);
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.chatFooter}>
@@ -44,11 +54,19 @@ const Footer = () => {
             setInputHeight(e.nativeEvent.contentSize.height)
           }
         />
-        <View
-          style={{ flex: 0.1, justifyContent: "center", alignSelf: "center" }}
-        >
-          <Feather onPress={onSumbit} name="send" size={24} color="black" />
-        </View>
+        {!isSubmitted ? (
+          <View
+            style={{ flex: 0.1, justifyContent: "center", alignSelf: "center" }}
+          >
+            <Feather onPress={onSumbit} name="send" size={24} color="black" />
+          </View>
+        ) : (
+          <View
+            style={{ flex: 0.1, justifyContent: "center", alignSelf: "center" }}
+          >
+            <MaterialIcons onPress={onReset} name="loop" size={24} color="black" />
+          </View>
+        )}
       </View>
     </View>
   );
